@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import EditTodo from './EditTodo';
+import axios from 'axios';
 
 const ListTodos = () => {
   const [todos, setTodos] = useState([]);
@@ -8,9 +9,9 @@ const ListTodos = () => {
 
   const deleteTodo = async (id) => {
     try {
-      const deleteTodo = await fetch(`http://localhost:5000/todos/${id}`, {
-        method: 'DELETE',
-      });
+      const deleteTodo = await axios.delete(
+        `http://localhost:5000/todos/${id}`
+      );
 
       setTodos(todos.filter((todo) => todo.todo_id !== id));
     } catch (err) {
@@ -18,18 +19,17 @@ const ListTodos = () => {
     }
   };
 
-  const getTodos = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/todos');
-      const jsonData = await response.json();
-
-      setTodos(jsonData);
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
-
   useEffect(() => {
+    const getTodos = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/todos');
+        console.log(response);
+        setTodos(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
     getTodos();
   }, []);
 

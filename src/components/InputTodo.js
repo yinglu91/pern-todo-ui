@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const InputTodo = () => {
   const [description, setDescription] = useState('');
@@ -7,11 +8,8 @@ const InputTodo = () => {
     e.preventDefault();
 
     try {
-      const body = { description };
-      const response = await fetch('http://localhost:5000/todos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+      const response = await axios.post('http://localhost:5000/todos', {
+        description,
       });
 
       window.location = '/';
